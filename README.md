@@ -154,6 +154,31 @@ All script are defined in the `package-scripts.js` file, but the most important 
 - Run `npm start build` to generated all JavaScript files from the TypeScript sources (There is also a vscode task for this called `build`).
 - To start the builded app located in `dist` use `npm start`.
 
+### Creating a new Resource
+
+- Run `npm run console make:resource` to create a resource and the necessary files with it
+- You will be prompted for the resource name and properties. The table-name should be named in the same way as the resource (all lower case).
+- The "id" for the data record will be automatically generated, you can choose between string or integer.
+
+The following files are created:
+
+* controller
+* service
+* repository
+* noFoundError
+* model
+* query
+* type
+* migration
+
+After the files are created, based on the properties and resorce name, please check the files for necessary adjustments.
+
+- Delete not used imports or definitions
+- check the toString values in the model
+- add the "created" in /subsribers/event.ts
+
+After all the basic stuff is consistent, you can start to add relations and mutations etc.
+
 ### Database Migration
 
 - Run `typeorm migrations:create -n <migration-file-name>` to create a new migration file.
