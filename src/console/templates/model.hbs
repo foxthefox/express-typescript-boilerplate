@@ -1,0 +1,34 @@
+import { IsNotEmpty } from 'class-validator';
+import { Column, Entity, PrimaryGeneratedColumn{{#if hasTimestamps}}, CreateDateColumn, UpdateDateColumn {{/if}} } from 'typeorm';
+
+@Entity()
+export class {{name.capitalize}} {
+    {{#if stringprimary}}
+    @PrimaryGeneratedColumn('uuid')
+    public id: string;
+    {{else}}
+    @PrimaryGeneratedColumn()
+    public id: number;
+    {{/if}}
+
+    {{#each properties}}
+    {{#unless nullable}}
+    @IsNotEmpty()
+    {{/unless}}
+    @Column()
+    public {{name.lowerCase}}: {{type.script}};
+    {{/each}}
+
+    {{#if hasTimestamps}}
+    @CreateDateColumn({default: () => Date.now(), type: 'timestamp'})
+    public createdDate: Date;
+
+    @UpdateDateColumn({default: () => Date.now(), type: 'timestamp'})
+    public updatedDate: Date;
+    {{/if}}
+
+    // please check if all belong to string, delete when other type!
+    public toString(): string {
+    return `${this.id} {{#each properties}}${this.{{name.lowerCase}} }{{/each}}`;
+    }
+}

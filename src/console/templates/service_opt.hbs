@@ -1,0 +1,73 @@
+import { Service } from 'typedi';
+import { OrmRepository } from 'typeorm-typedi-extensions';
+
+import { EventDispatcher, EventDispatcherInterface } from '../../decorators/EventDispatcher';
+import { Logger, LoggerInterface } from '../../decorators/Logger';
+import { {{namecap}} } from '../models/{{namecap}}';
+import { {{namecap}}Repository } from '../repositories/{{namecap}}Repository';
+import { events } from '../subscribers/events';
+
+@Service()
+export class {{namecap}}Service {
+
+    constructor(
+        @OrmRepository() private {{namelow}}Repository: {{namecap}}Repository,
+        @EventDispatcher() private eventDispatcher: EventDispatcherInterface,
+        @Logger(__filename) private log: LoggerInterface
+    ) { }
+
+    public find(): Promise<{{namecap}}[]> {
+        this.log.info('Find all {{namelow}}s');
+        return this.{{namelow}}Repository.find();
+    }
+
+    {{#if stringprimary}}
+    public findOne(id: string): Promise<{{namecap}} | undefined> {
+        this.log.info('Find one {{namelow}}');
+        return this.{{namelow}}Repository.findOne({id});
+    }
+
+    public async create({{namelow}}: {{namecap}}): Promise<{{namecap}}> {
+        this.log.info('Create a new {{namelow}} => ', {{namelow}}.toString());
+        const new{{namecap}} = await this.{{namelow}}Repository.save({{namelow}});
+        this.eventDispatcher.dispatch(events.{{namelow}}.created, new{{namecap}}); //add {{namelow}} in /subscribers/events.ts
+        return new{{namecap}};
+    }
+
+    public update(id: string, {{namelow}}: {{namecap}}): Promise<{{namecap}}> {
+        this.log.info('Update a {{namelow}}');
+        {{namelow}}.id = id;
+        return this.{{namelow}}Repository.save({{namelow}});
+    }
+
+    public async delete(id: string): Promise<void> {
+        this.log.info('Delete a {{namelow}}');
+        await this.{{namelow}}Repository.delete(id);
+        return;
+    }
+    {{else}}
+    public findOne(id: number): Promise<{{namecap}} | undefined> {
+        this.log.info('Find one {{namelow}}');
+        return this.{{namelow}}Repository.findOne({id});
+    }
+
+    public async create({{namelow}}: {{namecap}}): Promise<{{namecap}}> {
+        this.log.info('Create a new {{namelow}} => ', {{namelow}}.toString());
+        const new{{namecap}} = await this.{{namelow}}Repository.save({{namelow}});
+        this.eventDispatcher.dispatch(events.{{namelow}}.created, new{{namecap}}); //add {{namelow}} in /subscribers/events.ts
+        return new{{namecap}};
+    }
+
+    public update(id: number, {{namelow}}: {{namecap}}): Promise<{{namecap}}> {
+        this.log.info('Update a {{namelow}}');
+        {{namelow}}.id = id;
+        return this.{{namelow}}Repository.save({{namelow}});
+    }
+
+    public async delete(id: number): Promise<void> {
+        this.log.info('Delete a {{namelow}}');
+        await this.{{namelow}}Repository.delete(id);
+        return;
+    }
+    {{/if}}
+}

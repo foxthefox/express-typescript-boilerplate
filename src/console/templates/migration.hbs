@@ -1,0 +1,54 @@
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+
+export class Create{{namecap}}Table{{nametim}} implements MigrationInterface {
+
+    public async up(queryRunner: QueryRunner): Promise<any> {
+        const table = new Table({
+            name: '{{namelow}}',
+            columns: [
+                {{#if stringprimary}}
+                {
+                    name: 'id',
+                    type: 'varchar',
+                    length: '255',
+                    isPrimary: true,
+                    isNullable: false,
+                },
+                {{else}}
+                {
+                    name: 'id',
+                    type: 'integer',
+                    length: '11',
+                    isPrimary: true,
+                    isNullable: false,
+                },
+                {{/if}}
+                {{#each properties}}
+                {
+                    name: '{{name.lowerCase}}',
+                    type: '{{type.database}}',
+                    isPrimary: {{primary}},
+                    isNullable: {{nullable}},
+                },
+                {{/each}}
+                {{#if hasTimestamps}}
+                {
+                    name: 'createdDate',
+                    type: 'timestamp',
+                    default: 'CURRENT_TIMESTAMP',
+                },
+                {
+                    name: 'updatedDate',
+                    type: 'timestamp',
+                    default: 'CURRENT_TIMESTAMP',
+                },
+                {{/if}}
+            ],
+        });
+        await queryRunner.createTable(table);
+    }
+
+    public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.dropTable('{{namelow}}');
+    }
+}

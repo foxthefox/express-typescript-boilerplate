@@ -1,0 +1,43 @@
+import {
+    Authorized, Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put
+} from 'routing-controllers';
+
+import { {{name.capitalize}}NotFoundError } from '../errors/{{name.capitalize}}NotFoundError';
+import { {{name.capitalize}} } from '../models/{{name.capitalize}}';
+import { {{name.capitalize}}Service } from '../services/{{name.capitalize}}Service';
+
+@Authorized()
+@JsonController('/{{name.lowerCase}}')
+export class {{name.capitalize}}Controller {
+
+    constructor(
+        private {{name.lowerCase}}Service: {{name.capitalize}}Service
+    ) { }
+
+    @Get()
+    public find(): Promise<{{name.capitalize}}[]> {
+        return this.{{name.lowerCase}}Service.find();
+    }
+
+    @Get('/:id')
+    @OnUndefined({{name.capitalize}}NotFoundError)
+    public one( @Param('id') id: string): Promise<{{name.capitalize}} | undefined> {
+        return this.{{name.lowerCase}}Service.findOne(id);
+    }
+
+    @Post()
+    public create( @Body() {{name.lowerCase}}: {{name.capitalize}}): Promise<{{name.capitalize}}> {
+        return this.{{name.lowerCase}}Service.create({{name.lowerCase}});
+    }
+
+    @Put('/:id')
+    public update( @Param('id') id: string, @Body() {{name.lowerCase}}: {{name.capitalize}}): Promise<{{name.capitalize}}> {
+        return this.{{name.lowerCase}}Service.update(id, {{name.lowerCase}});
+    }
+
+    @Delete('/:id')
+    public delete( @Param('id') id: string): Promise<void> {
+        return this.{{name.lowerCase}}Service.delete(id);
+    }
+    // Implement your routes here
+}

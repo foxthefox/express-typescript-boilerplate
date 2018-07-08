@@ -1,0 +1,28 @@
+import { GraphQLFieldConfig, GraphQLList } from 'graphql';
+
+import { Logger, LoggerInterface } from '../../decorators/Logger';
+import { AbstractGraphQLQuery, GraphQLContext, Query } from '../../lib/graphql';
+import { {{name.capitalize}} } from '../models/{{name.capitalize}}';
+import { {{name.capitalize}}Service } from '../services/{{name.capitalize}}Service';
+import { {{name.capitalize}}Type } from '../types/{{name.capitalize}}Type';
+
+@Query()
+export class Get{{name.capitalize}}sQuery extends AbstractGraphQLQuery<GraphQLContext<any, any>, {{name.capitalize}}[], any> implements GraphQLFieldConfig {
+    public type = new GraphQLList({{name.capitalize}}Type);
+    public allow = [];
+    public args = {};
+
+    constructor(
+        private {{name.lowerCase}}Service: {{name.capitalize}}Service,
+        @Logger(__filename) private log: LoggerInterface
+    ) {
+        super();
+    }
+
+    public async run(root: any, args: any, context: GraphQLContext<any, any>): Promise<{{name.capitalize}}[]> {
+        const {{name.lowerCase}}s = await this.{{name.lowerCase}}Service.find();
+        this.log.info(`Found ${ {{name.lowerCase}}s.length} {{name.lowerCase}}s`);
+        return {{name.lowerCase}}s;
+    }
+
+}

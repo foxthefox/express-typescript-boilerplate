@@ -1,0 +1,13 @@
+declare module 'resources' {
+
+    interface {{name.capitalize}} {
+        {{#each properties}}
+        {{name.lowerCase}}: {{type.script}};
+        {{/each}}
+        {{#if hasTimestamps}}
+        createdAt: Date;
+        updatedAt: Date;
+        {{/if}}
+    }
+
+}

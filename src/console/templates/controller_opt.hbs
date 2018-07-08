@@ -1,0 +1,65 @@
+import {
+    Authorized, Body, Delete, Get, JsonController, OnUndefined, Param, Post, Put
+} from 'routing-controllers';
+
+import { {{namecap}}NotFoundError } from '../errors/{{namecap}}NotFoundError';
+import { {{namecap}} } from '../models/{{namecap}}';
+import { {{namecap}}Service } from '../services/{{namecap}}Service';
+
+@Authorized()
+@JsonController('/{{namelow}}')
+export class {{namecap}}Controller {
+
+    constructor(
+        private {{namelow}}Service: {{namecap}}Service
+    ) { }
+
+    @Get()
+    public find(): Promise<{{namecap}}[]> {
+        return this.{{namelow}}Service.find();
+    }
+    {{#if stringprimary}}
+    @Get('/:id')
+    @OnUndefined({{namecap}}NotFoundError)
+    public one( @Param('id') id: string): Promise<{{namecap}} | undefined> {
+        return this.{{namelow}}Service.findOne(id);
+    }
+
+    @Post()
+    public create( @Body() {{namelow}}: {{namecap}}): Promise<{{namecap}}> {
+        return this.{{namelow}}Service.create({{namelow}});
+    }
+
+    @Put('/:id')
+    public update( @Param('id') id: string, @Body() {{namelow}}: {{namecap}}): Promise<{{namecap}}> {
+        return this.{{namelow}}Service.update(id, {{namelow}});
+    }
+
+    @Delete('/:id')
+    public delete( @Param('id') id: string): Promise<void> {
+        return this.{{namelow}}Service.delete(id);
+
+    {{else}}
+    @Get('/:id')
+    @OnUndefined({{namecap}}NotFoundError)
+    public one( @Param('id') id: number): Promise<{{namecap}} | undefined> {
+        return this.{{namelow}}Service.findOne(id);
+    }
+
+    @Post()
+    public create( @Body() {{namelow}}: {{namecap}}): Promise<{{namecap}}> {
+        return this.{{namelow}}Service.create({{namelow}});
+    }
+
+    @Put('/:id')
+    public update( @Param('id') id: number, @Body() {{namelow}}: {{namecap}}): Promise<{{namecap}}> {
+        return this.{{namelow}}Service.update(id, {{namelow}});
+    }
+
+    @Delete('/:id')
+    public delete( @Param('id') id: number): Promise<void> {
+        return this.{{namelow}}Service.delete(id);
+    {{/if}}
+    }
+    // Implement your routes here
+}

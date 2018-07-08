@@ -1,0 +1,48 @@
+import { Service } from 'typedi';
+import { OrmRepository } from 'typeorm-typedi-extensions';
+
+import { EventDispatcher, EventDispatcherInterface } from '../../decorators/EventDispatcher';
+import { Logger, LoggerInterface } from '../../decorators/Logger';
+import { {{name.capitalize}} } from '../models/{{name.capitalize}}';
+import { {{name.capitalize}}Repository } from '../repositories/{{name.capitalize}}Repository';
+import { events } from '../subscribers/events';
+
+@Service()
+export class {{name.capitalize}}Service {
+
+    constructor(
+        @OrmRepository() private {{name.lowerCase}}Repository: {{name.capitalize}}Repository,
+        @EventDispatcher() private eventDispatcher: EventDispatcherInterface,
+        @Logger(__filename) private log: LoggerInterface
+    ) { }
+
+    public find(): Promise<{{name.capitalize}}[]> {
+        this.log.info('Find all {{name.lowerCase}}s');
+        return this.{{name.lowerCase}}Repository.find();
+    }
+
+    public findOne(id: string): Promise<{{name.capitalize}} | undefined> {
+        this.log.info('Find one {{name.lowerCase}}');
+        return this.{{name.lowerCase}}Repository.findOne({ id });
+    }
+
+    public async create({{name.lowerCase}}: {{name.capitalize}}): Promise<{{name.capitalize}}> {
+        this.log.info('Create a new {{name.lowerCase}} => ', {{name.lowerCase}}.toString());
+        const new{{name.capitalize}} = await this.{{name.lowerCase}}Repository.save({{name.lowerCase}});
+        this.eventDispatcher.dispatch(events.{{name.lowerCase}}.created, new{{name.capitalize}}); //add {{namelow}} in /subscribers/events.ts
+        return new{{name.capitalize}};
+    }
+
+    public update(id: string, {{name.lowerCase}}: {{name.capitalize}}): Promise<{{name.capitalize}}> {
+        this.log.info('Update a {{name.lowerCase}}');
+        {{name.lowerCase}}.id = id;
+        return this.{{name.lowerCase}}Repository.save({{name.lowerCase}});
+    }
+
+    public async delete(id: string): Promise<void> {
+        this.log.info('Delete a {{name.lowerCase}}');
+        await this.{{name.lowerCase}}Repository.delete(id);
+        return;
+    }
+
+}
