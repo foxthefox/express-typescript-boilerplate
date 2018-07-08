@@ -1,0 +1,30 @@
+import {
+    GraphQLFieldConfigMap, GraphQLID, GraphQLInt, GraphQLObjectType, GraphQLString, GraphQLBoolean, GraphQLFloat
+} from 'graphql';
+
+// import { {{name.capitalize}} } from '../models/{{name.capitalize}}';
+
+const {{name.capitalize}}Fields: GraphQLFieldConfigMap = {
+    {{#if stringprimary}}
+    id: {
+        type: GraphQLID,
+        description: 'id of dataset',
+    },
+    {{else}}
+    id: {
+        type: GraphQLID,
+        description: 'id of dataset',
+    },
+    {{/if}}
+    {{#each properties}}
+    {{name.lowerCase}}: {
+        type: {{type.gqltyp}},
+        description: '{{gqltext}}',
+    },
+    {{/each}}
+};
+export const {{name.capitalize}}Type = new GraphQLObjectType({
+    name: '{{name.capitalize}}',
+    description: 'A single {{name.lowerCase}}.',
+    fields: () => ({ ...{{name.capitalize}}Fields, ... {} }),
+});
