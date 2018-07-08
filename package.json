@@ -8,7 +8,11 @@
     "test": "npm start test",
     "build": "npm start build",
     "presetup": "yarn install",
-    "setup": "npm start config && npm start setup.script"
+    "setup": "npm start config && npm start setup.script",
+    "console": "npm run ts-node:fast -- ./src/console/lib/console.ts",
+    "banner": "npm run ts-node:fast -- ./src/console/lib/banner.ts",
+    "ts-node": "./node_modules/.bin/ts-node",
+    "ts-node:fast": "./node_modules/.bin/ts-node --transpileOnly"
   },
   "engines": {
     "node": ">=8.0.0"
